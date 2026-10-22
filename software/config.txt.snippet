@@ -1,0 +1,49 @@
+# SPDX-FileCopyrightText: 2026 Emanuel Bachmann
+# SPDX-License-Identifier: MIT
+# Sensor HAT v3, Pi-Modus (KEIN XIAO gesteckt!). In /boot/firmware/config.txt eintragen
+# (Raspberry Pi OS Trixie/Bookworm; Pi 2: 32-bit Lite-Image)
+
+# I2C: VEML7700 0x10, SHT40 0x44, SGP41 0x59, SCD41 0x62, Feinstaub 0x6B/0x69
+# 100 kHz lassen (Sensirion-Feinstaubsensoren koennen hoechstens 100 kHz)
+dtparam=i2c_arm=on
+
+
+# Status-LED WS2812 an GPIO10 (SPI0 MOSI), z. B. mit adafruit-circuitpython-neopixel-spi
+dtparam=spi=on
+
+# Summer an GPIO13: Hardware-PWM (4 kHz, 50 %), dann /sys/class/pwm/pwmchip0/pwm1.
+# Passiver Summer: nur mit Ton (PWM) ansteuern, GPIO13 nie dauerhaft auf HIGH lassen.
+# Der analoge Audioausgang des Pi nutzt dieselbe PWM-Einheit: bei Bedarf dtparam=audio=off.
+dtoverlay=pwm,pin=13,func=4
+
+# 1-Wire (DS18B20) an GPIO4, Pull-up 4,7 kOhm ist auf dem HAT
+dtoverlay=w1-gpio,gpiopin=4
+
+# UART an J3 (GPIO14/15). Seriellen Login vorher in raspi-config abschalten
+# (Interface Options -> Serial Port: Login-Shell NEIN, Hardware JA).
+# Pi 3/4: fuer Radar-Module (Dauer-Datenstrom) die PL011-UART statt der Mini-UART nehmen.
+# Das schaltet Bluetooth ab; mit miniuart-bt statt disable-bt bleibt es an (dann core_freq fest).
+[pi3]
+dtoverlay=disable-bt
+[pi4]
+dtoverlay=disable-bt
+[pi2]
+# Pi 2: GPIO14/15 ist schon die PL011 (/dev/ttyAMA0), kein Bluetooth-Overlay noetig.
+[pi5]
+# Pi 5: UART0 auf GPIO14/15 ist standardmaessig aus; das Overlay schaltet sie ein (/dev/ttyAMA0).
+# Achtung: Mit enable_uart=1 und ohne Debug-Kabel gibt der Pi 5 Kernel-Meldungen auf GPIO14/15
+# aus. Deshalb die serielle Konsole in raspi-config abschalten (siehe oben).
+dtoverlay=uart0-pi5
+[all]
+enable_uart=1
+
+# I2S-Mikrofon ICS-43434 (GPIO18 BCLK, GPIO19 LRCLK, GPIO20 DIN), Pi ist Taktmaster.
+# Bewaehrter Weg fuer I2S-MEMS-Mikros; vor dem Einsatz testen:
+#   arecord -l
+#   arecord -D plughw:<karte>,0 -c 2 -r 48000 -f S32_LE -d 5 test.wav
+# Das Mikro liefert 24 Bit im linken Kanal; Abtastraten 16 kHz oder 32-48 kHz verwenden,
+# 18,75-23 kHz (z. B. 22,05 kHz) liegen ausserhalb der Betriebsarten des ICS-43434.
+# Hinweis: das Overlay belegt zusaetzlich GPIO16 (auf diesem HAT frei) und arbeitet mit fester
+# Hardware-Abtastrate von 48 kHz; andere Raten liefert plughw per Resampling.
+dtparam=i2s=on
+dtoverlay=googlevoicehat-soundcard

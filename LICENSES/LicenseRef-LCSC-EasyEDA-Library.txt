@@ -1,0 +1,24 @@
+LCSC / EasyEDA component library data
+
+Some symbols and footprints in lib/ were converted with easyeda2kicad
+(https://github.com/uPesy/easyeda2kicad.py) from the LCSC / EasyEDA component
+library. Copies of them are embedded in Sensor-HAT.kicad_sch and
+Sensor-HAT.kicad_pcb, and the production files, PDFs and renders are derived
+from them. Each part carries its LCSC part number.
+
+No specific licence for this library data is stated. EasyEDA's general Terms
+of Service (https://easyeda.com/legal, section "Copyright and Intellectual
+Property", version effective 2026-09-21) limit the use of site content,
+including data and electronic files, to personal, informational and
+non-commercial purposes. Unless otherwise indicated, they do not permit
+copying, distributing or creating derivative works.
+
+The data is included here in good faith, without an explicit permission to
+redistribute it, and only so that the design opens and can be manufactured.
+All rights in the original data remain with their owners. The licences of
+this project apply only to the changes made by the Sensor HAT authors, for
+example the corrected land patterns written by scripts/patch_lib.py. They do
+not apply to the original data. The LCSC/EasyEDA 3D models are not included.
+
+If you hold rights in any of this data and object to its inclusion, please
+open an issue and it will be removed or replaced.

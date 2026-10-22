@@ -1,0 +1,6 @@
+Designator,Comment,LCSC Part #,MPN,Manufacturer,Note
+J1,RPi GPIO 2x20,C2977589,2.54-2*20,ZHOURI,"Raspberry Pi 40-pin GPIO header (female, 8.5 mm, bottom side)"
+J2,1-Wire GND/DQ/3V3,C49257,2.54-1*3P,BOOMELE,"DS18B20 header, same pin order as the TO-92 package (GND, DQ, VDD)"
+J3,UART (e.g. PMS5003),C32713271,HX PZ2.54-1x5P ZZ,hanxia,1 V+ (JP1 3.3 V or JP3 5 V) 2 GND 3 RX of Pi (to device TX) 4 TX of Pi (to device RX) 5 GPIO17
+J7,XIAO D0-D6,C2897370,PM254-1-07-Z-8.5,HCTL,"XIAO socket, left row: D0..D6"
+J8,XIAO 5V-D7,C2897370,PM254-1-07-Z-8.5,HCTL,"XIAO socket, right row: 5V, GND, 3V3, D10, D9, D8, D7"

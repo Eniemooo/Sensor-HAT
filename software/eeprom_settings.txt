@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: 2026 Emanuel Bachmann
+# SPDX-License-Identifier: MIT
+# HAT+ ID-EEPROM (CAT24C32, Adresse 0x50 auf ID_SD/ID_SC) fuer den Sensor HAT v3.
+# Format: raspberrypi/utils/eeptools (eepmake). Ablauf siehe README.de.md, Abschnitt "ID-EEPROM".
+
+# Eindeutige Produkt-UUID. Nullen = eepmake erzeugt eine; die ausgegebene UUID
+# danach hier eintragen, damit alle Boards dieselbe Produkt-UUID tragen.
+product_uuid 00000000-0000-0000-0000-000000000000
+
+product_id 0x0001
+product_ver 0x0003
+
+vendor "Emanuel Bachmann"
+product "Sensor HAT v3"
+
+# Reiner Sensor-HAT, liefert keinen Strom an den Pi
+current_supply 0
+
+# Optional: Name eines eigenen Device-Tree-Overlays unter /boot/firmware/overlays/<name>.dtbo,
+# das die Firmware dann automatisch laedt. Ohne eigenes Overlay auskommentiert lassen und
+# die Zeilen aus software/config.txt.snippet verwenden.
+#dt_blob "ebachmann-sensorhat"

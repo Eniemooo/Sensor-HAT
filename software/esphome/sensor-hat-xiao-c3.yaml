@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: 2026 Emanuel Bachmann
+# SPDX-License-Identifier: MIT
+# Sensor HAT v3 in XIAO mode with a Seeed XIAO ESP32-C3.
+# 1. Copy this file and sensor-hat-common.yaml into your ESPHome config folder.
+# 2. Create secrets.yaml from secrets.yaml.example: wifi_ssid, wifi_password,
+#    api_encryption_key (openssl rand -base64 32), ap_password.
+# 3. Flash once over USB (ESPHome dashboard or https://web.esphome.io), afterwards over Wi-Fi.
+# Never plug the XIAO in while the board sits on a Raspberry Pi.
+
+substitutions:
+  name: sensor-hat                   # must be unique per board, e.g. sensor-hat-kitchen
+  friendly_name: Sensor HAT
+  d0: GPIO2
+  d1: GPIO3
+  d2: GPIO4
+  d3: GPIO5
+  d4: GPIO6
+  d5: GPIO7
+  d6: GPIO21
+  d7: GPIO20
+  d8: GPIO8
+  d9: GPIO9
+  d10: GPIO10
+
+esp32:
+  board: seeed_xiao_esp32c3
+  framework:
+    type: esp-idf
+
+packages:
+  common: !include sensor-hat-common.yaml

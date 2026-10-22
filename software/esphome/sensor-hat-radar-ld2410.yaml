@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: 2026 Emanuel Bachmann
+# SPDX-License-Identifier: MIT
+# Optional package: HLK-LD2410/LD2410B/LD2410C mmWave radar on J3, 256000 baud.
+# Needs 5 V (bridge JP3, never together with JP1) AND a re-ordered cable:
+# J3 is V+, GND, module TX, module RX, OUT (see README). Not for the LD2410S (different protocol).
+# Include it from your board file:
+#   packages:
+#     common: !include sensor-hat-common.yaml
+#     radar: !include sensor-hat-radar-ld2410.yaml
+uart:
+  id: radar_uart
+  tx_pin: ${d6}
+  rx_pin: ${d7}
+  baud_rate: 256000
+  parity: NONE
+  stop_bits: 1
+
+ld2410:
+  uart_id: radar_uart
+
+binary_sensor:
+  - platform: ld2410
+    has_target:
+      name: "Presence"
+    has_moving_target:
+      name: "Moving Target"
+    has_still_target:
+      name: "Still Target"

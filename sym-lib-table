@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "SensorHAT")(type "KiCad")(uri "${KIPRJMOD}/lib/SensorHAT.kicad_sym")(options "")(descr "Project parts from LCSC/EasyEDA"))
+)

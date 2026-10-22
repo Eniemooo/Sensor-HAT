@@ -1,0 +1,30 @@
+# Build intermediates: routing attempts, logs, reports (scripts/build.sh and export.py recreate them)
+/build/
+/.template-clean.kicad_pcb
+
+# KiCad per-user settings, locks, autosaves, local history and caches
+*.kicad_prl
+*.lck
+*-backups/
+.history/
+_autosave-*
+fp-info-cache
+*.bak
+
+# Third-party 3D models (no clear licence, ~40 MB): python3 -I scripts/fetch_3d_models.py .
+/lib/SensorHAT.3dshapes
+
+# STEP export (19 MB, contains the third-party 3D models above): built locally by
+# scripts/export.py, not published
+/docs/*.step
+
+# Python, ESPHome, easyeda2kicad
+__pycache__/
+*.pyc
+.venv/
+venv/
+.esphome/
+secrets.yaml
+.easyeda_cache/
+
+.DS_Store

@@ -1,0 +1,44 @@
+# Licensing of files that cannot carry an SPDX header (https://reuse.software).
+# Scripts and software carry their own headers. If several tables match a file, the last one wins.
+version = 1
+
+# Hardware design: KiCad project and settings
+[[annotations]]
+path = ["Sensor-HAT.kicad_pro", "fp-lib-table", "sym-lib-table"]
+SPDX-FileCopyrightText = "2026 Emanuel Bachmann"
+SPDX-License-Identifier = "CERN-OHL-S-2.0"
+
+# Schematic, board and everything generated from them: they embed or show LCSC/EasyEDA part data (NOTICE.md)
+[[annotations]]
+path = [
+    "Sensor-HAT.kicad_sch",
+    "Sensor-HAT.kicad_pcb",
+    "production/**",
+    "docs/*.pdf",
+    "docs/*.png",
+]
+SPDX-FileCopyrightText = ["2026 Emanuel Bachmann", "LCSC / EasyEDA (embedded part data)"]
+SPDX-License-Identifier = "CERN-OHL-S-2.0 AND LicenseRef-LCSC-EasyEDA-Library"
+
+# Documentation: CC-BY-SA-4.0 or, at the recipient's choice, CERN-OHL-S-2.0
+[[annotations]]
+path = ["README.md", "README.de.md", "CHANGELOG.md", "NOTICE.md", "docs/*.md"]
+SPDX-FileCopyrightText = "2026 Emanuel Bachmann"
+SPDX-License-Identifier = "CC-BY-SA-4.0 OR CERN-OHL-S-2.0"
+
+[[annotations]]
+path = ".gitignore"
+SPDX-FileCopyrightText = "2026 Emanuel Bachmann"
+SPDX-License-Identifier = "MIT"
+
+# Parts converted from the LCSC/EasyEDA library, with project changes (see NOTICE.md)
+[[annotations]]
+path = ["lib/SensorHAT.kicad_sym", "lib/SensorHAT.pretty/**"]
+SPDX-FileCopyrightText = ["LCSC / EasyEDA (original part data)", "2026 Emanuel Bachmann (modifications)"]
+SPDX-License-Identifier = "LicenseRef-LCSC-EasyEDA-Library AND CERN-OHL-S-2.0"
+
+# Modified copy of a KiCad library footprint (renamed, keepout zone removed), stays under the KiCad library licence
+[[annotations]]
+path = "lib/SensorHAT.pretty/SHT4x_DFN-4_1.5x1.5mm_P0.8mm_NoCentralPad.kicad_mod"
+SPDX-FileCopyrightText = ["KiCad Library Team", "2026 Emanuel Bachmann (renamed, keepout zone removed)"]
+SPDX-License-Identifier = "CC-BY-SA-4.0"

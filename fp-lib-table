@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "SensorHAT")(type "KiCad")(uri "${KIPRJMOD}/lib/SensorHAT.pretty")(options "")(descr "Project footprints from LCSC/EasyEDA"))
+)

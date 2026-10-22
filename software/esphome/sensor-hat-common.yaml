@@ -1,0 +1,168 @@
+# SPDX-FileCopyrightText: 2026 Emanuel Bachmann
+# SPDX-License-Identifier: MIT
+# Sensor HAT v3 - shared ESPHome package for XIAO mode (all boards).
+# Do not use this file directly: include it from sensor-hat-xiao-s3/-c3/-c6.yaml, which set the
+# board and the D0..D10 -> GPIO substitutions.
+#
+# Board wiring (XIAO pin -> function):
+#   D0 I2S LRCLK   D1 I2S BCLK   D2 I2S DATA (mic)   D3 buzzer PWM   D4 button (low = pressed)
+#   D5 1-Wire (JP6 1-2, default) or radar OUT (JP6 2-3)   D6 UART TX   D7 UART RX
+#   D8 I2C SDA     D9 I2C SCL    D10 RGB LED data
+# Expected at compile time: strapping warnings on the C3 (GPIO2/8/9) and S3 (GPIO3). They are
+# safe on this board (pull-ups / ignored strap), see README.
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+
+logger:
+  hardware_uart: USB_SERIAL_JTAG     # keep UART0 (D6/D7) free for the radar
+
+api:
+  encryption:
+    key: !secret api_encryption_key    # Home Assistant asks for this key when adding the device
+ota:
+  - platform: esphome
+    encryption: {}                     # reuses the API encryption key
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    password: !secret ap_password      # fallback hotspot when the Wi-Fi is unreachable
+captive_portal:
+
+i2c:
+  id: bus_a
+  sda: ${d8}
+  scl: ${d9}
+  frequency: 100kHz                  # SCD41/SGP41/SEN6x are fine with 100 kHz
+
+i2s_audio:
+  - id: i2s_bus
+    i2s_lrclk_pin: ${d0}
+    i2s_bclk_pin: ${d1}
+
+microphone:
+  - platform: i2s_audio
+    id: mic
+    i2s_audio_id: i2s_bus
+    adc_type: external
+    i2s_din_pin: ${d2}
+    pdm: false
+    channel: left                    # ICS-43434 L/R pin is tied to GND
+    bits_per_sample: 32bit
+    sample_rate: 16000
+
+one_wire:
+  - platform: gpio
+    pin: ${d5}
+
+output:
+  - platform: ledc
+    pin: ${d3}
+    id: buzzer_out
+
+rtttl:
+  output: buzzer_out
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: status_led
+    name: "Status LED"
+    pin: ${d10}
+    num_leds: 1
+    chipset: ws2812
+    channel_colors: GRB
+
+binary_sensor:
+  - platform: gpio
+    name: "Button"
+    pin:
+      number: ${d4}
+      inverted: true
+      mode: INPUT                    # 10k pull-up + 100 nF on the board
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+    on_click:
+      - rtttl.play: "beep:d=16,o=6,b=200:c"
+
+sensor:
+  - platform: scd4x
+    id: co2_sensor
+    measurement_mode: periodic
+    update_interval: 30s
+    temperature_offset: 2            # only affects the hidden SCD41 T/RH, not the CO2 value
+    altitude_compensation: 100m      # metres above sea level of your room (no barometer on v3)
+    co2:
+      id: co2
+      name: "CO2"
+      on_value:
+        then:
+          - lambda: |-
+              auto call = id(status_led).turn_on();
+              call.set_brightness(0.25);
+              if (x < 1000) call.set_rgb(0.0, 1.0, 0.0);        // UBA: unbedenklich
+              else if (x < 2000) call.set_rgb(1.0, 0.6, 0.0);   // auffaellig: lueften
+              else call.set_rgb(1.0, 0.0, 0.0);                  // inakzeptabel
+              call.perform();
+    temperature:
+      name: "SCD41 Temperature"
+      disabled_by_default: true
+    humidity:
+      name: "SCD41 Humidity"
+      disabled_by_default: true
+
+  - platform: sht4x
+    temperature:
+      id: room_t
+      name: "Temperature"
+      filters:
+        - offset: 0.0                # calibrate: reference minus reading after 15 min (see README)
+    humidity:
+      id: room_rh
+      name: "Humidity"
+    update_interval: 30s
+
+  - platform: sgp4x
+    voc_index:
+      name: "VOC Index"
+    nox_index:
+      name: "NOx Index"
+    compensation:
+      temperature_source: room_t
+      humidity_source: room_rh
+
+  - platform: veml7700
+    address: 0x10
+    update_interval: 30s
+    ambient_light:
+      name: "Illuminance"
+
+  - platform: sound_level
+    microphone: mic
+    passive: false
+    measurement_duration: 1000ms
+    # ESPHome reports dBFS; ICS-43434: -26 dBFS at 94 dB SPL -> +120 gives approx. dB SPL (unweighted)
+    peak:
+      name: "Sound Peak"
+      unit_of_measurement: "dB"
+      filters:
+        - offset: 120.0
+    rms:
+      name: "Sound Level"
+      unit_of_measurement: "dB"
+      filters:
+        - offset: 120.0
+
+  # DS18B20 on J2 (1-Wire, JP6 in position 1-2). Remove if nothing is connected.
+  - platform: dallas_temp
+    name: "DS18B20"
+    update_interval: 60s
+
+# Optional: Sensirion SEN6x particulate sensor on J4 (JP4 closed = 3.3 V). Uncomment:
+#  - platform: sen6x
+#    ...  (see https://esphome.io/components/sensor/ for the SEN5x/SEN6x component of your ESPHome version)
+
+# Optional: mmWave presence radar on J3 -> add 'radar: !include sensor-hat-radar-ld2410.yaml'
+# to the packages: section of your board file.
