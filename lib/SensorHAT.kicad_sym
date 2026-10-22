@@ -94,17 +94,6 @@
 					(type background)
 				)
 			)
-			(circle
-				(center -1.27 5.08)
-				(radius 0.38)
-				(stroke
-					(width 0)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
 			(pin input line
 				(at -5.08 3.81 0)
 				(length 2.54)
@@ -270,17 +259,6 @@
 				)
 				(fill
 					(type background)
-				)
-			)
-			(circle
-				(center -3.81 7.62)
-				(radius 0.38)
-				(stroke
-					(width 0)
-					(type default)
-				)
-				(fill
-					(type none)
 				)
 			)
 			(pin passive line
@@ -633,6 +611,10 @@
 		)
 	)
 	(symbol "TS-1187A-B-A-B"
+		(pin_names
+			(offset 0.0254)
+			(hide yes)
+		)
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "SW"
@@ -1033,6 +1015,10 @@
 		)
 	)
 	(symbol "AO3400A"
+		(pin_names
+			(offset 0.0254)
+			(hide yes)
+		)
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "Q"
@@ -1336,6 +1322,10 @@
 		)
 	)
 	(symbol "1N4148W_C81598"
+		(pin_names
+			(offset 0.0254)
+			(hide yes)
+		)
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "D"
@@ -1494,6 +1484,10 @@
 		)
 	)
 	(symbol "MLT-5020"
+		(pin_names
+			(offset 0.0254)
+			(hide yes)
+		)
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "BUZZER"
@@ -1805,17 +1799,6 @@
 					(type background)
 				)
 			)
-			(circle
-				(center -6.35 2.54)
-				(radius 0.38)
-				(stroke
-					(width 0)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
 			(pin passive line
 				(at -10.16 1.27 0)
 				(length 2.54)
@@ -2037,17 +2020,6 @@
 					(type background)
 				)
 			)
-			(circle
-				(center -6.35 3.81)
-				(radius 0.38)
-				(stroke
-					(width 0)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
 			(pin passive line
 				(at -10.16 2.54 0)
 				(length 2.54)
@@ -2159,6 +2131,10 @@
 		)
 	)
 	(symbol "BAV70-C68978"
+		(pin_names
+			(offset 0.0254)
+			(hide yes)
+		)
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "D"
@@ -2461,17 +2437,6 @@
 					(type background)
 				)
 			)
-			(circle
-				(center -5.08 3.81)
-				(radius 0.38)
-				(stroke
-					(width 0)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
 			(pin passive line
 				(at -8.89 2.54 0)
 				(length 2.54)
@@ -2655,17 +2620,6 @@
 				)
 				(fill
 					(type background)
-				)
-			)
-			(circle
-				(center 0.00 8.89)
-				(radius 0.38)
-				(stroke
-					(width 0)
-					(type default)
-				)
-				(fill
-					(type none)
 				)
 			)
 			(pin passive line

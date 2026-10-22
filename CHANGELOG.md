@@ -1,5 +1,18 @@
 # Changelog
 
+## Schematic update: 2026-10-22 (no electrical change)
+
+- **Labels.**
+  - Reference and value texts no longer cross wires, labels or other parts.
+  - The XIAO series resistors R33–R43 now sit in one row.
+- **Symbols.**
+  - Pin names that the EasyEDA symbols drew over their graphics are hidden (MOSFETs, diodes, buzzer, button).
+  - The pin-1 dots are removed.
+- **Unchanged.**
+  - Same netlist as before: 74 nets, 112 parts.
+  - ERC 0, DRC 0 with schematic parity.
+  - The board and production files did not change.
+
 ## v3.0 "Universal": 2026-10-22, first public version (not yet manufactured)
 
 - **Two hosts.** The board runs either as a HAT for Raspberry Pi or standalone with a user-supplied Seeed Studio XIAO ESP32-S3/C3/C6 in J7/J8.

@@ -32,12 +32,32 @@ def effects(hide=False, justify=None):
     return e
 
 
-def prop(name, value, x, y, hide=False, angle=0):
-    return ["property", Q(name), Q(value), ["at", x, y, angle], effects(hide)]
+def prop(name, value, x, y, hide=False, angle=0, justify=None):
+    return ["property", Q(name), Q(value), ["at", x, y, angle], effects(hide, justify)]
 
 
 def snap(v):
     return round(v / 1.27) * 1.27
+
+
+def field_positions(sym, sx, sy):
+    """(x, y, justify) for Reference and Value, kept clear of the pin stubs and labels.
+
+    Nothing leaves to the right: beside the body (passives, FETs, sensors with pins on the
+    left/top/bottom). Pins only left/right: above and below. Otherwise: above the top-right
+    corner and above the labels of the right-hand pins, which no stub crosses."""
+    pins = kicadlib.pins(sym).values()
+    out = {int((ang + 180) % 360) for _x, _y, ang, _n, _t in pins}
+    bx0, by0, bx1, by1 = kicadlib.body_bbox(sym)
+    if 0 not in out:
+        x = round(sx + bx1 + 1.27, 2)
+        return (x, sy - 1.27, ["left"]), (x, sy + 1.27, ["left"])
+    if not out & {90, 270}:
+        _x0, ymin, _x1, ymax = kicadlib.bbox(sym)
+        return (sx, sy - ymax - 1.8, None), (sx, sy - ymin + 1.8, None)
+    right_pins = [py for _x, py, ang, _n, _t in pins if int((ang + 180) % 360) == 0]
+    x, top = round(sx + bx1 + 0.635, 2), sy - max([by1] + [py + 2.54 for py in right_pins])
+    return (x, round(top - 3.3, 2), ["left"]), (x, round(top - 1.27, 2), ["left"])
 
 
 def main(project_dir):
@@ -59,6 +79,12 @@ def main(project_dir):
         pin_map = kicadlib.pins(sym)
         ref = part["ref"]
         is_power = ref.startswith("#")
+        if is_power:
+            ref_at, val_at = (sx, sy - ymax - 1.8, None), (sx, sy - ymin + 1.8, None)
+        else:
+            ref_at, val_at = field_positions(sym, sx, sy)
+            if part.get("dnp"):                  # keep the value clear of KiCad's DNP cross
+                val_at = (val_at[0], round(val_at[1] + 1.27, 2), val_at[2])
 
         node = [
             "symbol",
@@ -70,8 +96,8 @@ def main(project_dir):
             ["on_board", "no" if is_power else "yes"],
             ["dnp", "yes" if part.get("dnp") else "no"],
             ["uuid", uid("sym-" + ref)],
-            prop("Reference", ref, sx, sy - ymax - 1.8, hide=is_power),
-            prop("Value", part["value"], sx, sy - ymin + 1.8),
+            prop("Reference", ref, ref_at[0], ref_at[1], hide=is_power, justify=ref_at[2]),
+            prop("Value", part["value"], val_at[0], val_at[1], justify=val_at[2]),
             prop("Footprint", part.get("fp", ""), sx, sy, hide=True),
             prop("Datasheet", part.get("datasheet", ""), sx, sy, hide=True),
             prop("Description", part.get("desc", ""), sx, sy, hide=True),
@@ -107,9 +133,11 @@ def main(project_dir):
             labels.append(["label", Q(net), ["at", ex, ey, out], effects(justify=just),
                            ["uuid", uid(f"lbl-{ref}-{num}")]])
         if is_power:
-            # PWR_FLAG: pin 1 at the symbol origin, label sits right on it
+            # PWR_FLAG: pin 1 at the symbol origin; a stub to the right keeps the label off the flag
             net = nets["1"]
-            labels.append(["label", Q(net), ["at", sx, sy, 0], effects(justify=["left", "bottom"]),
+            wires.append(["wire", ["pts", ["xy", sx, sy], ["xy", sx + STUB, sy]],
+                          ["stroke", ["width", 0], ["type", "default"]], ["uuid", uid(f"w-{ref}")]])
+            labels.append(["label", Q(net), ["at", sx + STUB, sy, 0], effects(justify=["left", "bottom"]),
                            ["uuid", uid(f"lbl-{ref}")]])
 
     for i, (txt, x, y, size) in enumerate(design.SCH_TEXTS):

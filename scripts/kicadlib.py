@@ -95,3 +95,31 @@ def bbox(sym):
     if not xs:
         return (-2.54, -2.54, 2.54, 2.54)
     return (min(xs), min(ys), max(xs), max(ys))
+
+
+def body_bbox(sym):
+    """(xmin, ymin, xmax, ymax) of the drawn body only (no pins), library coordinates."""
+    xs, ys = [], []
+    for r in walk(sym, "rectangle"):
+        for k in ("start", "end"):
+            pt = find(r, k)
+            xs.append(float(pt[1]))
+            ys.append(float(pt[2]))
+    for pl in walk(sym, "xy"):
+        xs.append(float(pl[1]))
+        ys.append(float(pl[2]))
+    for a in walk(sym, "arc"):
+        for k in ("start", "mid", "end"):
+            pt = find(a, k)
+            if pt:
+                xs.append(float(pt[1]))
+                ys.append(float(pt[2]))
+    for c in walk(sym, "circle"):
+        ctr = find(c, "center")
+        rad = find(c, "radius")
+        if ctr and rad:
+            xs += [float(ctr[1]) - float(rad[1]), float(ctr[1]) + float(rad[1])]
+            ys += [float(ctr[2]) - float(rad[1]), float(ctr[2]) + float(rad[1])]
+    if not xs:
+        return bbox(sym)
+    return (min(xs), min(ys), max(xs), max(ys))

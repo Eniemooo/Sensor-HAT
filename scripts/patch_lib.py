@@ -7,6 +7,8 @@ Idempotent; run before gen_pcb.py (build.sh does). Usage: python3 -I patch_lib.p
   perimeter paste 0.55 mm wide, solder mask 0.1 mm larger than the copper (Sensirion SCD4x
   datasheet v1.7, Fig. 4).
 - VEML7700-TT: no legend circle under the package.
+- Symbols: pin names hidden where EasyEDA draws them over the graphics (FETs, diodes, buzzer,
+  switch); the small pin-1 dots removed, they sit on the pin names.
 """
 import os
 import sys
@@ -70,12 +72,32 @@ def patch_veml7700(tree):
     drop_silk_circles_inside(tree, -3.43, -2.54, 3.43, 0.38)
 
 
+HIDE_PIN_NAMES = {"AO3400A", "1N4148W_C81598", "BAV70-C68978", "MLT-5020", "TS-1187A-B-A-B"}
+PIN1_DOT_RADIUS = "0.38"
+
+
+def drop_pin1_dots(node):
+    for x in node:
+        if isinstance(x, list):
+            drop_pin1_dots(x)
+    node[:] = [x for x in node if not (isinstance(x, list) and x and x[0] == "circle"
+                                       and find(x, "radius") and str(find(x, "radius")[1]) == PIN1_DOT_RADIUS)]
+
+
 def patch_symbols(path):
     """EasyEDA symbols come with 'unspecified' pin types, which ERC flags on every
     connection. Make them passive; VEML7700-TT keeps its explicit types."""
     tree = load(path)
     changed = 0
     for sym in find_all(tree, "symbol"):
+        if sym[1] in HIDE_PIN_NAMES:
+            new = ["pin_names", ["offset", "0.0254"], ["hide", "yes"]]
+            old = find(sym, "pin_names")
+            if old:
+                sym[sym.index(old)] = new
+            else:
+                sym.insert(2, new)                # right after the symbol name, as KiCad writes it
+        drop_pin1_dots(sym)
         if sym[1] == "VEML7700-TT":
             continue
         for p in walk(sym, "pin"):
