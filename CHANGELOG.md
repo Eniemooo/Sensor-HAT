@@ -1,5 +1,15 @@
 # Changelog
 
+## Board update: 2026-10-27 (bottom silkscreen only)
+
+- **Sponsor.** The prototype PCBs are sponsored by AISLER.
+- **Logo placeholder.**
+  - Added AISLER's logo placeholder on the bottom silkscreen: a 32 × 8 mm rectangle of four 0.084 mm lines.
+  - AISLER replaces it with their logo during fabrication.
+- **Unchanged.**
+  - Copper, drill, solder mask, paste, BOM and CPL are unchanged.
+  - DRC 0 with schematic parity.
+
 ## Schematic update: 2026-10-22 (no electrical change)
 
 - **Labels.**

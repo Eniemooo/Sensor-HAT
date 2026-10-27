@@ -43,6 +43,7 @@ Raspberry Pi is a trademark of Raspberry Pi Ltd. All other product and company n
 - Qwiic (SparkFun)
 - STEMMA QT (Adafruit)
 - JST
+- AISLER
 - JLCPCB, LCSC and EasyEDA
 - Home Assistant
 - ESPHome

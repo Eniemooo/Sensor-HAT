@@ -240,6 +240,12 @@ ALL_CU = ["F.Cu", "In1.Cu", "In2.Cu", "B.Cu"]
 # silkscreen lines (F.Silkscreen): XIAO outline, open towards the USB-C board edge
 SILK_LINES = [((5.0, 11.7), (22.8, 11.7)), ((22.8, 11.7), (22.8, 30.3))]
 
+# AISLER logo replacement placeholder (sponsor): rectangle of four 3.3 mil lines, 4:1, long side 30-60 mm.
+# AISLER swaps it for their logo at fabrication. (layer, x0, y0, x1, y1): bottom side, below the legend,
+# clear of pads, holes, the sensor-island slot and other silkscreen.
+LOGO_PLACEHOLDERS = [("B", 9.0, 35.75, 41.0, 43.75)]
+LOGO_LINE_WIDTH = 0.08382
+
 # rule areas: (name, layers, outline, {what is NOT allowed})
 KEEPOUTS = [
     *[(f"slot-margin-{i}", ALL_CU, pts, {"tracks", "vias"}) for i, pts in enumerate(_slot_margins())],

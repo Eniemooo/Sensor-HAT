@@ -48,6 +48,15 @@ def add_line(board, layer, a, b, width=0.1):
     board.Add(s)
 
 
+def add_logo_placeholders(board):
+    """AISLER logo replacement: four separate silkscreen lines per rectangle (placement.LOGO_PLACEHOLDERS)."""
+    for side, x0, y0, x1, y1 in placement.LOGO_PLACEHOLDERS:
+        layer = {"F": pcbnew.F_SilkS, "B": pcbnew.B_SilkS}[side]
+        corners = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+        for a, b in zip(corners, corners[1:] + corners[:1]):
+            add_line(board, layer, a, b, width=placement.LOGO_LINE_WIDTH)
+
+
 def add_arc(board, layer, start, mid, end, width=0.1):
     s = pcbnew.PCB_SHAPE(board)
     s.SetShape(pcbnew.SHAPE_T_ARC)
@@ -482,6 +491,7 @@ def main(project_dir):
 
     for (x0, y0), (x1, y1) in placement.SILK_LINES:
         add_line(board, pcbnew.F_SilkS, (x0, y0), (x1, y1), width=0.15)
+    add_logo_placeholders(board)
 
     for text, x, y, opts in placement.SILK:
         opts = dict(opts)
