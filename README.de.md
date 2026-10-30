@@ -9,8 +9,6 @@ Offene Raumsensor-Platine (KiCad 10, 65 × 56 mm, 4 Lagen) für **zwei Betriebsa
 
 **Nie beides gleichzeitig.** Wenn die Platine auf einem Pi steckt, gehört kein XIAO in den Steckplatz.
 
-**Sponsor:** Die Leiterplatten der Prototypen sponsert [AISLER](https://aisler.net), Leiterplattenfertigung in Deutschland. Danke! Das Rechteck auf dem Bestückungsdruck der Unterseite ist AISLERs Logo-Platzhalter, den AISLER bei der Fertigung durch sein Logo ersetzt.
-
 | Funktion | Bauteil | I²C / Pi-GPIO / XIAO-Pin |
 |---|---|---|
 | CO₂ (photoakustisch, echt) | Sensirion SCD41 (U1), eigener 3,3-V-Regler | 0x62 |

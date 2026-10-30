@@ -1,8 +1,13 @@
 # Changelog
 
+## Docs update: 2026-10-30
+
+- **No AISLER sponsorship.** The prototypes will not be made under the planned AISLER sponsorship, so the sponsor note was removed from both READMEs.
+- **Logo frame.** The 32 × 8 mm rectangle on the bottom silkscreen stays for now. Manufacturers other than AISLER print it as an empty frame.
+
 ## Board update: 2026-10-27 (bottom silkscreen only)
 
-- **Sponsor.** The prototype PCBs are sponsored by AISLER.
+- **Sponsor.** Prepared for a planned AISLER sponsorship of the prototype PCBs (not used, see 2026-10-30).
 - **Logo placeholder.**
   - Added AISLER's logo placeholder on the bottom silkscreen: a 32 × 8 mm rectangle of four 0.084 mm lines.
   - AISLER replaces it with their logo during fabrication.

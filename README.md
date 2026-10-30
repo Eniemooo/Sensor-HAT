@@ -11,8 +11,6 @@ An open-hardware indoor-environment sensor board, designed in KiCad 10 (65 × 56
 
 > **Status:** the design is complete. KiCad ERC and DRC report no errors, and the ESPHome configs validate. **It has not been tested in hardware yet.** Build prototypes before ordering in quantity.
 
-**Sponsor:** the prototype PCBs are sponsored by [AISLER](https://aisler.net), a PCB manufacturer in Germany. Thank you! The rectangle on the bottom silkscreen is AISLER's logo placeholder, which they replace with their logo during fabrication.
-
 ## What is on the board
 
 | Function | Part | I²C address / Pi GPIO / XIAO pin |
